@@ -2,9 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int yylex(void); 
+
 void yyerror(const char *s);  /* Declare yyerror with correct signature */
-// int yyinput(void);  // Declare yyinput explicitly
-int yylex(void);
+int yyinput(void);  // Declare yyinput explicitly
 
 %}
 

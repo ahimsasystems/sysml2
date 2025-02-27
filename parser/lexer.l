@@ -1,12 +1,18 @@
+%option c++
+%option prefix="cpp_"
+
+
 %{
 #include "parser.tab.h" // Include Bison-generated token definitions
 #include <string.h>
 #include <stdlib.h>
+#include <iostream>
+#include <string>
 
 // Function to process an UNRESTRICTED_NAME
 char *process_unrestricted_name(const char *lexeme) {
     size_t len = strlen(lexeme);
-    char *result = malloc(len); // Allocate memory for the processed string
+    char *result = (char*) malloc(len); // Allocate memory for the processed string
     if (!result) {
         fprintf(stderr, "Memory allocation failed.\n");
         exit(EXIT_FAILURE);
@@ -40,12 +46,15 @@ char *process_unrestricted_name(const char *lexeme) {
 %%
 
 [a-zA-Z_][a-zA-Z_0-9]*  {
-    yylval.str = strdup(yytext); // For BASIC_NAME, directly pass the matched lexeme
+    // yylval.str = strdup(yytext); // For BASIC_NAME, directly pass the matched lexeme
+    yylval.str = strdup(text()); // For BASIC_NAME, directly pass the matched lexeme
+
     return BASIC_NAME;
 }
 
 '([^'\\]|\\.)*'         {
-    yylval.str = process_unrestricted_name(yytext); // Process the UNRESTRICTED_NAME lexeme
+    // yylval.str = process_unrestricted_name(yytext); // Process the UNRESTRICTED_NAME lexeme
+    yylval.str = process_unrestricted_name(text()); // Process the UNRESTRICTED_NAME lexeme
     return UNRESTRICTED_NAME;
 }
 
